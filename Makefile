@@ -1,5 +1,17 @@
-PROJECT		= "github.com/kula/vault-plugin-secrets-minio"
+PROJECT		= "github.com/eplightning/vault-plugin-secrets-minio"
 GOFILES		= $(shell find . -name "*.go")
+
+GOARCH = amd64
+
+UNAME = $(shell uname -s)
+
+ifndef OS
+	ifeq ($(UNAME), Linux)
+		OS = linux
+	else ifeq ($(UNAME), Darwin)
+		OS = darwin
+	endif
+endif
 
 default: vault-plugin-secrets-minio
 
@@ -12,13 +24,4 @@ clean:
 test: vault-plugin-secrets-minio
 	/bin/bash test/test.sh
 
-deps:
-	go get ./...
-	# If you don't do this, you get a panic because /debug/requests
-	# is registered twice, because both minio and vault vendor
-	# golang.org/x/net/trace/ but neither seem to use it?
-	# https://github.com/etcd-io/etcd/issues/9357
-	rm -f ${GOPATH}/src/github.com/minio/minio/vendor/golang.org/x/net/trace/
-	rm -f ${GOPATH}/src/github.com/hashicorp/vault/vendor/golang.org/x/net/trace/
-
-.PHONY: default clean test deps
+.PHONY: default clean test
