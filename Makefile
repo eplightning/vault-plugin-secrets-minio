@@ -16,7 +16,7 @@ endif
 default: vault-plugin-secrets-minio
 
 vault-plugin-secrets-minio: $(GOFILES)
-	go build ./cmd/vault-plugin-secrets-minio
+	go build -ldflags "-s -w" ./cmd/vault-plugin-secrets-minio
 
 clean:
 	rm -f vault-plugin-secrets-minio
